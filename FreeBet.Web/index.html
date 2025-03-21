@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeBet - Безплатни Залози</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <div class="logo">FreeBet</div>
+                <div class="nav-links">
+                    <a href="#" class="active">Начало</a>
+                    <a href="#">Класиране</a>
+                    <a href="#">Правила</a>
+                    <div id="loginBtn" class="login-btn">Вход</div>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero">
+                <h1>Безплатни залози всеки ден</h1>
+                <p>Заложете на три мача дневно и спечелете награди</p>
+            </section>
+
+            <section id="matches" class="matches-section">
+                <h2>Днешни мачове</h2>
+                <div class="matches-container">
+                    <!-- Мачовете ще се добавят динамично чрез JavaScript -->
+                </div>
+            </section>
+
+            <section id="leaderboard" class="leaderboard-section">
+                <h2>Седмично класиране</h2>
+                <div class="leaderboard-container">
+                    <!-- Класирането ще се добавя динамично -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Модален прозорец за вход -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Вход с телефонен номер</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <input type="tel" id="phone" placeholder="Въведете телефонен номер" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Изпрати код</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html> 
