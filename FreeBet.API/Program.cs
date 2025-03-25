@@ -11,6 +11,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
+
 // Configure JWT authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!);
@@ -92,6 +105,9 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = string.Empty; // За да отваря Swagger UI на root URL
     });
 }
+
+// Use CORS
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
