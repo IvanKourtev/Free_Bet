@@ -82,9 +82,9 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Secrets and sensitive data
-appsettings.Development.json
-appsettings.Production.json
-secrets.json
+**/appsettings.json
+**/appsettings.*.json
+**/secrets.json
 *.pfx
 *.key
 *.pem 
