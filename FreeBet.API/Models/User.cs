@@ -12,6 +12,9 @@ public class User
     [Required]
     public required string Nickname { get; set; }
 
+    [Required]
+    public required string FullName { get; set; }
+
     public int Points { get; set; }
 
     public DateTime? LastBetDate { get; set; }

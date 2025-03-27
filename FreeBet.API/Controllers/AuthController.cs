@@ -91,6 +91,7 @@ public class AuthController : ControllerBase
             {
                 PhoneNumber = request.PhoneNumber,
                 Nickname = request.Nickname,
+                FullName = request.FullName,
                 Points = 0,
                 CreatedAt = DateTime.UtcNow,
                 Bets = new List<Bet>(),
@@ -114,18 +115,9 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        // Проверка дали потребителят съществува
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.PhoneNumber == request.PhoneNumber);
-
-        if (user == null)
-        {
-            return NotFound("Потребителят не е намерен.");
-        }
-
         try
         {
-            // Изпращане на SMS за верификация
+            // Изпращаме код за верификация
             var verification = await VerificationResource.CreateAsync(
                 to: request.PhoneNumber,
                 channel: "sms",
@@ -176,18 +168,29 @@ public class AuthController : ControllerBase
             return StatusCode(500, "Грешка при верификация: " + ex.Message);
         }
     }
+
+    [HttpPost("check-user")]
+    public async Task<IActionResult> CheckUser([FromBody] CheckUserRequest request)
+    {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.PhoneNumber == request.PhoneNumber);
+
+        return Ok(new { exists = user != null });
+    }
 }
 
 public class RegisterRequest
 {
     public required string PhoneNumber { get; set; }
     public required string Nickname { get; set; }
+    public required string FullName { get; set; }
 }
 
 public class VerifyRequest
 {
     public required string PhoneNumber { get; set; }
     public required string Nickname { get; set; }
+    public required string FullName { get; set; }
     public required string Code { get; set; }
 }
 
@@ -200,4 +203,9 @@ public class VerifyLoginRequest
 {
     public required string PhoneNumber { get; set; }
     public required string Code { get; set; }
+}
+
+public class CheckUserRequest
+{
+    public required string PhoneNumber { get; set; }
 } 
