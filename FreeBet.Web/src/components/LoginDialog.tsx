@@ -96,17 +96,29 @@ const StyledPhoneInput = styled(Box)(({ theme }) => ({
   },
 }));
 
+const StyledLink = styled('a')(({ theme }) => ({
+  color: theme.palette.primary.main,
+  textDecoration: 'none',
+  cursor: 'pointer',
+  '&:hover': {
+    textDecoration: 'underline',
+  },
+}));
+
 interface LoginDialogProps {
   open: boolean;
   onClose: () => void;
 }
 
 export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
-  const [step, setStep] = useState<'phone' | 'code'>('phone');
+  const [step, setStep] = useState<'phone' | 'code' | 'register'>('phone');
   const [phone, setPhone] = useState('');
   const [code, setCode] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [fullName, setFullName] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [error, setError] = useState<React.ReactNode | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isNewUser, setIsNewUser] = useState(false);
 
   const handlePhoneSubmit = async () => {
     if (!phone || phone.length < 10) {
@@ -118,7 +130,21 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
     setError(null);
     
     try {
-      const response = await fetch('http://localhost:5003/api/auth/send-code', {
+      // Първо проверяваме дали потребителят съществува
+      const checkResponse = await fetch('/api/auth/check-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber: '+' + phone }),
+      });
+
+      const checkData = await checkResponse.json();
+
+      if (checkResponse.ok) {
+        setIsNewUser(!checkData.exists);
+      }
+
+      // Изпращаме код за верификация
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phoneNumber: '+' + phone }),
@@ -130,7 +156,21 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
         setStep('code');
         setError(null);
       } else {
-        setError(data.message || 'Възникна грешка при изпращане на кода');
+        if (response.status === 404) {
+          setError(
+            <Box>
+              Грешен мобилен номер или нямате регистрация.{' '}
+              <StyledLink onClick={() => {
+                setIsNewUser(true);
+                setStep('register');
+              }}>
+                Регистрирайте се тук
+              </StyledLink>
+            </Box>
+          );
+        } else {
+          setError(data.message || 'Възникна грешка при изпращане на кода');
+        }
       }
     } catch (err) {
       console.error('Error sending code:', err);
@@ -150,10 +190,52 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:5003/api/auth/verify', {
+      if (isNewUser) {
+        setStep('register');
+      } else {
+        const response = await fetch('/api/auth/verify-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phoneNumber: '+' + phone, code }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem('token', data.token);
+          onClose();
+          window.location.reload();
+        } else {
+          setError(data.message || 'Невалиден код');
+        }
+      }
+    } catch (err) {
+      console.error('Error verifying code:', err);
+      setError('Не може да се свърже със сървъра. Моля, проверете дали API сървърът работи.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRegister = async () => {
+    if (!fullName.trim() || !nickname.trim()) {
+      setError('Моля, попълнете всички полета');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/auth/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phoneNumber: '+' + phone, code }),
+        body: JSON.stringify({ 
+          phoneNumber: '+' + phone, 
+          code,
+          fullName,
+          nickname 
+        }),
       });
 
       const data = await response.json();
@@ -163,10 +245,10 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
         onClose();
         window.location.reload();
       } else {
-        setError(data.message || 'Невалиден код');
+        setError(data.message || 'Грешка при регистрацията');
       }
     } catch (err) {
-      console.error('Error verifying code:', err);
+      console.error('Error registering:', err);
       setError('Не може да се свърже със сървъра. Моля, проверете дали API сървърът работи.');
     } finally {
       setIsLoading(false);
@@ -193,7 +275,9 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
             style={{ position: 'relative', zIndex: 1 }}
           >
             <Typography variant="h5" gutterBottom align="center" sx={{ mb: 2, fontWeight: 600 }}>
-              {step === 'phone' ? 'Влезте с телефон' : 'Въведете код'}
+              {step === 'phone' ? 'Влезте с телефон' : 
+               step === 'code' ? 'Въведете код' : 
+               'Регистрация'}
             </Typography>
 
             {error && (
@@ -231,7 +315,7 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
                   {isLoading ? 'Изпращане...' : 'Продължи'}
                 </AnimatedButton>
               </Box>
-            ) : (
+            ) : step === 'code' ? (
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                 <TextField
                   fullWidth
@@ -257,6 +341,51 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
                   onClick={() => {
                     setStep('phone');
                     setCode('');
+                    setError(null);
+                  }}
+                  disabled={isLoading}
+                  size="small"
+                >
+                  Назад
+                </Button>
+              </Box>
+            ) : (
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                <TextField
+                  fullWidth
+                  label="Име и фамилия"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Въведете името си от Револута"
+                  autoFocus
+                  disabled={isLoading}
+                  size="medium"
+                />
+                <TextField
+                  fullWidth
+                  label="Никнейм"
+                  value={nickname}
+                  onChange={(e) => setNickname(e.target.value)}
+                  placeholder="Изберете никнейм"
+                  disabled={isLoading}
+                  size="medium"
+                />
+                <AnimatedButton
+                  variant="contained"
+                  size="large"
+                  onClick={handleRegister}
+                  disabled={isLoading}
+                  endIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : <ArrowForward />}
+                >
+                  {isLoading ? 'Регистрация...' : 'Регистрация'}
+                </AnimatedButton>
+                <Button
+                  variant="text"
+                  onClick={() => {
+                    setStep('phone');
+                    setCode('');
+                    setFullName('');
+                    setNickname('');
                     setError(null);
                   }}
                   disabled={isLoading}

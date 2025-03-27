@@ -1,0 +1,42 @@
+{
+  "common": {
+    "home": "Home",
+    "leaderboard": "Leaderboard",
+    "rules": "Rules",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register",
+    "phoneNumber": "Phone Number",
+    "nickname": "Nickname",
+    "fullName": "Full Name",
+    "points": "Points",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  },
+  "auth": {
+    "loginTitle": "Login",
+    "registerTitle": "Register",
+    "phoneVerification": "Phone Verification",
+    "enterCode": "Enter Code",
+    "codeSent": "Verification code sent",
+    "invalidCode": "Invalid code",
+    "userNotFound": "User not found",
+    "userExists": "User already exists",
+    "nicknameTaken": "Nickname already taken"
+  },
+  "bet": {
+    "placeBet": "Place Bet",
+    "predictScore": "Predict Score",
+    "homeTeam": "Home Team",
+    "awayTeam": "Away Team",
+    "matchTime": "Match Time",
+    "yourPrediction": "Your Prediction",
+    "betPlaced": "Bet placed successfully",
+    "betError": "Error placing bet"
+  }
+} 

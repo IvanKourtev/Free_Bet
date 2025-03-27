@@ -1,0 +1,42 @@
+{
+  "common": {
+    "home": "Начало",
+    "leaderboard": "Класиране",
+    "rules": "Правила",
+    "profile": "Профил",
+    "logout": "Изход",
+    "login": "Вход",
+    "register": "Регистрация",
+    "phoneNumber": "Телефонен номер",
+    "nickname": "Прякор",
+    "fullName": "Име",
+    "points": "Точки",
+    "submit": "Изпрати",
+    "cancel": "Отказ",
+    "confirm": "Потвърди",
+    "loading": "Зареждане...",
+    "error": "Грешка",
+    "success": "Успех"
+  },
+  "auth": {
+    "loginTitle": "Вход",
+    "registerTitle": "Регистрация",
+    "phoneVerification": "Верификация на телефон",
+    "enterCode": "Въведете код",
+    "codeSent": "Изпратен е код за верификация",
+    "invalidCode": "Невалиден код",
+    "userNotFound": "Потребителят не е намерен",
+    "userExists": "Потребителят вече съществува",
+    "nicknameTaken": "Този прякор вече е зает"
+  },
+  "bet": {
+    "placeBet": "Направи залог",
+    "predictScore": "Предскажи резултат",
+    "homeTeam": "Домакин",
+    "awayTeam": "Гост",
+    "matchTime": "Време на мача",
+    "yourPrediction": "Вашето предсказание",
+    "betPlaced": "Залогът е направен успешно",
+    "betError": "Грешка при залагане"
+  }
+} 

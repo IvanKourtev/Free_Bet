@@ -1,0 +1,62 @@
+{
+  "common": {
+    "home": "Home",
+    "leaderboard": "Leaderboard",
+    "rules": "Rules",
+    "profile": "Profile",
+    "login": "Login",
+    "logout": "Logout",
+    "cancel": "Cancel",
+    "register": "Register",
+    "nickname": "Nickname",
+    "revolutName": "Revolut Name",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "email": "Email",
+    "submit": "Submit",
+    "error": "Error",
+    "success": "Success",
+    "loading": "Loading...",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "confirmLogout": "Are you sure you want to logout?",
+    "loginSuccess": "Login successful",
+    "registerSuccess": "Registration successful",
+    "invalidCredentials": "Invalid credentials",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "passwordsDontMatch": "Passwords do not match",
+    "nicknameRequired": "Nickname is required",
+    "revolutNameRequired": "Revolut name is required",
+    "nicknameInvalid": "Nickname can only contain Latin letters, numbers, dots and underscores",
+    "revolutNameInvalid": "Revolut name can only contain Latin letters",
+    "emailInvalid": "Invalid email format"
+  },
+  "profile": {
+    "title": "Profile",
+    "editProfile": "Edit Profile",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "profileUpdated": "Profile updated",
+    "passwordChanged": "Password changed"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "rank": "Rank",
+    "nickname": "Nickname",
+    "points": "Points",
+    "noData": "No data"
+  },
+  "rules": {
+    "title": "Rules",
+    "description": "Game rules will be described here"
+  }
+} 

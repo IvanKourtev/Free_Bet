@@ -1,0 +1,62 @@
+{
+  "common": {
+    "home": "Начало",
+    "leaderboard": "Класация",
+    "rules": "Правила",
+    "profile": "Профил",
+    "login": "Вход",
+    "logout": "Изход",
+    "cancel": "Отказ",
+    "register": "Регистрация",
+    "nickname": "Никнейм",
+    "revolutName": "Име в Revolut",
+    "password": "Парола",
+    "confirmPassword": "Потвърди парола",
+    "email": "Имейл",
+    "submit": "Изпрати",
+    "error": "Грешка",
+    "success": "Успех",
+    "loading": "Зареждане...",
+    "save": "Запази",
+    "delete": "Изтрий",
+    "edit": "Редактирай",
+    "back": "Назад"
+  },
+  "auth": {
+    "login": "Вход",
+    "register": "Регистрация",
+    "confirmLogout": "Сигурни ли сте, че искате да излезете?",
+    "loginSuccess": "Успешно влизане",
+    "registerSuccess": "Успешна регистрация",
+    "invalidCredentials": "Невалидни данни",
+    "emailRequired": "Имейлът е задължителен",
+    "passwordRequired": "Паролата е задължителна",
+    "passwordsDontMatch": "Паролите не съвпадат",
+    "nicknameRequired": "Никнеймът е задължителен",
+    "revolutNameRequired": "Името в Revolut е задължително",
+    "nicknameInvalid": "Никнеймът може да съдържа само латински букви, цифри, точки и долна черта",
+    "revolutNameInvalid": "Името в Revolut може да съдържа само латински букви",
+    "emailInvalid": "Невалиден имейл формат"
+  },
+  "profile": {
+    "title": "Профил",
+    "editProfile": "Редактиране на профил",
+    "changePassword": "Смяна на парола",
+    "currentPassword": "Текуща парола",
+    "newPassword": "Нова парола",
+    "confirmNewPassword": "Потвърди нова парола",
+    "profileUpdated": "Профилът е обновен",
+    "passwordChanged": "Паролата е променена"
+  },
+  "leaderboard": {
+    "title": "Класация",
+    "rank": "Място",
+    "nickname": "Никнейм",
+    "points": "Точки",
+    "noData": "Няма данни"
+  },
+  "rules": {
+    "title": "Правила",
+    "description": "Тук ще бъдат описани правилата на играта"
+  }
+} 

@@ -13,6 +13,11 @@ export const theme = createTheme({
       light: '#FF80AB',
       dark: '#F50057',
     },
+    error: {
+      main: '#f44336',
+      light: '#e57373',
+      dark: '#d32f2f',
+    },
     background: {
       default: '#F5F5F5',
       paper: '#FFFFFF',
@@ -52,12 +57,6 @@ export const theme = createTheme({
           boxShadow: 'none',
           '&:hover': {
             boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          },
-        },
-        contained: {
-          background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-          '&:hover': {
-            background: 'linear-gradient(45deg, #1976D2 30%, #2196F3 90%)',
           },
         },
       },

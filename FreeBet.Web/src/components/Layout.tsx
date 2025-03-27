@@ -15,6 +15,11 @@ import {
   useMediaQuery,
   useTheme,
   Container,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -23,9 +28,13 @@ import {
   Gavel,
   Person,
   Login,
+  Logout,
+  Leaderboard,
+  Info,
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LoginDialog } from './LoginDialog';
+import { useTranslation } from 'react-i18next';
 
 interface LayoutProps {
   children: ReactNode;
@@ -35,10 +44,12 @@ const Layout = ({ children }: LayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
   const location = useLocation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -59,18 +70,21 @@ const Layout = ({ children }: LayoutProps) => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsAuthenticated(false);
+    setLogoutDialogOpen(false);
     navigate('/');
   };
 
-  const menuItems = [
-    { text: 'Начало', icon: <Home />, path: '/' },
-    { text: 'Класиране', icon: <EmojiEvents />, path: '/leaderboard' },
-    { text: 'Правила', icon: <Gavel />, path: '/rules' },
-  ];
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'bg' ? 'en' : 'bg';
+    i18n.changeLanguage(newLang);
+  };
 
-  if (isAuthenticated) {
-    menuItems.push({ text: 'Профил', icon: <Person />, path: '/profile' });
-  }
+  const menuItems = [
+    { text: t('common.home'), icon: <Home />, path: '/' },
+    { text: t('common.leaderboard'), icon: <Leaderboard />, path: '/leaderboard' },
+    { text: t('common.rules'), icon: <Info />, path: '/rules' },
+    ...(isAuthenticated ? [{ text: t('common.profile'), icon: <Person />, path: '/profile' }] : []),
+  ];
 
   const drawer = (
     <Box sx={{ width: 250 }}>
@@ -99,13 +113,33 @@ const Layout = ({ children }: LayoutProps) => {
             <ListItemText primary={item.text} />
           </ListItem>
         ))}
+        <ListItem 
+          button 
+          onClick={() => setLogoutDialogOpen(true)}
+          sx={{
+            borderRadius: 2,
+            m: 1,
+            '&:hover': {
+              backgroundColor: '#f44336',
+              color: 'white',
+              '& .MuiListItemIcon-root': {
+                color: 'white',
+              },
+            },
+          }}
+        >
+          <ListItemIcon>
+            <Logout sx={{ color: '#f44336' }} />
+          </ListItemIcon>
+          <ListItemText primary={t('common.logout')} />
+        </ListItem>
       </List>
     </Box>
   );
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
-      <AppBar position="fixed" color="default">
+      <AppBar position="fixed" color="default" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -118,13 +152,27 @@ const Layout = ({ children }: LayoutProps) => {
           </IconButton>
           <Typography
             variant="h6"
-            component={motion.div}
-            whileHover={{ scale: 1.05 }}
+            component="div"
             sx={{ flexGrow: 1, cursor: 'pointer' }}
             onClick={() => navigate('/')}
           >
-            Безплатен Залог
+            Free Bet
           </Typography>
+          <Button
+            onClick={toggleLanguage}
+            sx={{ 
+              minWidth: 'auto', 
+              mr: 2,
+              fontSize: '1.5rem',
+              p: 1,
+              lineHeight: 1,
+              '&:hover': {
+                bgcolor: 'transparent',
+              },
+            }}
+          >
+            {i18n.language === 'bg' ? '🇧🇬' : '🇬🇧'}
+          </Button>
           <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: 2 }}>
             {menuItems.map((item) => (
               <Button
@@ -149,11 +197,20 @@ const Layout = ({ children }: LayoutProps) => {
           </Box>
           {isAuthenticated ? (
             <Button
-              color="inherit"
-              onClick={handleLogout}
-              sx={{ ml: 2 }}
+              variant="contained"
+              onClick={() => setLogoutDialogOpen(true)}
+              startIcon={<Logout />}
+              sx={{ 
+                ml: 2,
+                borderRadius: 2,
+                bgcolor: '#f44336',
+                color: 'white',
+                '&:hover': {
+                  bgcolor: '#d32f2f',
+                },
+              }}
             >
-              Изход
+              {t('common.logout')}
             </Button>
           ) : (
             <Button
@@ -161,7 +218,13 @@ const Layout = ({ children }: LayoutProps) => {
               variant="contained"
               onClick={() => setLoginOpen(true)}
               startIcon={<Login />}
-              sx={{ ml: 2 }}
+              sx={{ 
+                ml: 2,
+                borderRadius: 2,
+                '&:hover': {
+                  bgcolor: 'primary.dark',
+                },
+              }}
             >
               Вход
             </Button>
@@ -215,6 +278,26 @@ const Layout = ({ children }: LayoutProps) => {
         open={loginOpen}
         onClose={() => setLoginOpen(false)}
       />
+
+      <Dialog
+        open={logoutDialogOpen}
+        onClose={() => setLogoutDialogOpen(false)}
+      >
+        <DialogTitle>{t('common.logout')}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {t('auth.confirmLogout')}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setLogoutDialogOpen(false)} color="primary">
+            {t('common.cancel')}
+          </Button>
+          <Button onClick={handleLogout} color="error" variant="contained">
+            {t('common.logout')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
